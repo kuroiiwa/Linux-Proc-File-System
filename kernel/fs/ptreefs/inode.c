@@ -137,7 +137,8 @@ const struct file_operations ptreefs_root_dir_operations = {
 };
 
 struct inode *ptree_make_inode(struct super_block *sb,
-			       int mode) {
+			       int mode)
+{
 	struct inode *inode;
 
 	inode = new_inode(sb);
@@ -156,7 +157,8 @@ struct inode *ptree_make_inode(struct super_block *sb,
 
 static struct dentry *ptree_mount(struct file_system_type *fs_type,
 				  int flags, const char *dev_name,
-				  void *data) {
+				  void *data)
+{
 	return mount_single(fs_type, flags, data, ptree_fill_super);
 }
 
@@ -168,7 +170,8 @@ static struct file_system_type ptree_fs_type = {
 };
 
 struct dentry *ptree_create_dir(struct super_block *sb,
-				struct dentry *parent, const char *name) {
+				struct dentry *parent, const char *name)
+{
 	struct dentry *dentry;
 	struct inode *inode;
 	struct qstr qname;
@@ -198,7 +201,8 @@ struct dentry *ptree_create_dir(struct super_block *sb,
 };
 
 struct dentry *ptree_create_file(struct super_block *sb,
-				 struct dentry *dir, const char *name) {
+				 struct dentry *dir, const char *name)
+{
 	struct inode *inode;
 	struct dentry *dentry;
 	struct qstr qname;
@@ -276,19 +280,8 @@ static int ptree_fill_super(struct super_block *sb, void *data, int silent)
 		goto fail;
 	sb->s_op = &ptreefs_s_ops;
 
-	inode = new_inode(sb);
-	if (!inode)
-		goto fail;
-
-	inode->i_ino = 1;
-	inode->i_mtime = inode->i_atime = inode->i_ctime = CURRENT_TIME;
-	inode->i_mode = 0755;
-	inode->i_op = &simple_dir_inode_operations;
+	inode = d_inode(sb->s_root);
 	inode->i_fop = &ptreefs_root_dir_operations;
-
-	sb->s_root = d_make_root(inode);
-	if (!sb->s_root)
-		goto fail;
 
 	return 0;
 
