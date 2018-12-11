@@ -18,10 +18,10 @@
 * `cd user`
 * `make`
 * `./ptreeps`
-#### Ptreeps Test File
+### Ptreeps Test File
 * The `ptreeps` test file will give the current process hierarchy by calling `ls -R`. 
-* It will fork 20 child processes. Each of them will wait 5s and the test file will display process tree again.
-* After its children exit, it will display again.
+* It will fork 20 child processes. Each of them will wait 5s and the test file will display process tree.
+* After its children exit, it will display tree again.
 #### Result
 `...`
 ```
