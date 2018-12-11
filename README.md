@@ -51,4 +51,6 @@ ptreeps.name
 ```
 `...`
 
-
+### Reference
+* [Creating Linux virtual filesystems LWN.net](https://lwn.net/Articles/57369/)
+* [The Linux kernel: The Linux Virtual File System](https://www.win.tue.nl/~aeb/linux/lk/lk-8.html)
