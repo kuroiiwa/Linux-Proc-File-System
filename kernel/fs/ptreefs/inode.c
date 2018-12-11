@@ -96,7 +96,7 @@ static ssize_t ptreefs_read_file(struct file *file, char __user *buf,
 	return 0;
 };
 
-int ptreefs_root_dir_open(struct inode *inode, struct file *file)
+static int ptreefs_root_dir_open(struct inode *inode, struct file *file)
 {
 	struct super_block *sb = inode->i_sb;
 	struct dentry *dentry, *child;
@@ -137,7 +137,7 @@ const struct file_operations ptreefs_root_dir_operations = {
 	.fsync                = noop_fsync,
 };
 
-struct inode *ptree_make_inode(struct super_block *sb,
+static struct inode *ptree_make_inode(struct super_block *sb,
 			       int mode)
 {
 	struct inode *inode;
@@ -145,7 +145,7 @@ struct inode *ptree_make_inode(struct super_block *sb,
 	inode = new_inode(sb);
 
 	if (!inode)
-		return 0;
+		return NULL;
 
 	inode->i_ino = get_next_ino();
 	inode->i_mtime = inode->i_atime = inode->i_ctime = CURRENT_TIME;
@@ -183,12 +183,12 @@ struct dentry *ptree_create_dir(struct super_block *sb,
 
 	dentry = d_alloc(parent, &qname);
 	if (!dentry)
-		return 0;
+		return NULL;
 
 	inode = ptree_make_inode(sb, S_IFDIR | 0555);
 	if (!inode) {
 		dput(dentry);
-		return 0;
+		return NULL;
 	}
 
 	inode->i_op = &simple_dir_inode_operations;
@@ -212,7 +212,14 @@ struct dentry *ptree_create_file(struct super_block *sb,
 
 	inode = ptree_make_inode(sb, S_IFREG | 0555);
 	inode->i_fop = &ptreefs_file_operations;
+	if (!inode) {
+		dput(dentry);
+		return NULL;
+	}
+
 	dentry = d_alloc(dir, &qname);
+	if (!dentry)
+		return NULL;
 	d_add(dentry, inode);
 	return dentry;
 };
@@ -240,9 +247,12 @@ static int ptree_create_files(struct super_block *sb,
 				return -ENOMEM;
 
 			get_task_comm(name, p);
+			if (!name)
+				return -EFAULT;
 			repslash(name);
 			strcat(name, ".name");
-			ptree_create_file(sb, subdir, name);
+			if (!ptree_create_file(sb, subdir, name))
+				return -ENOMEM;
 
 		}
 		if (!going_up && !list_empty(&p->children)) {
