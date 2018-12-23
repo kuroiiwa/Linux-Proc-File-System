@@ -1,28 +1,27 @@
-# f18-hmwk6-team18
-## PtreeFS
-### Usage
-#### Compile and Install
+# PtreeFS
+## Usage
+### 1. Compile and Install
 * `cd kernel`
 * `cp vm.config .config`
 * `make -j2`
 * `sudo make modules_install && sudo make install`
-#### Mount
+### 2. Mount
 * `cd /`
 * `sudo mkdir ptreefs`
 * `sudo mount -t ptreefs ptreefs /ptreefs`
-#### Check Processes Tree
+### 3. Check Processes Tree
 * `cd /`
 * `cd /ptreefs`
 * `ls -R`
-#### Test
+### 4. Test
 * `cd user`
 * `make`
 * `./ptreeps`
-### Ptreeps Test File
+## Ptreeps Test File
 * The `ptreeps` test file will give the current process hierarchy by calling `ls -R`. 
 * It will fork 20 child processes. Each of them will wait 5s and the test file will display process tree.
 * After its children exit, it will display tree again.
-#### Result
+## Result
 ```
 ======================================
 After creating processes, name: ptreeps.name
@@ -49,6 +48,6 @@ ptreeps.name
 ptreeps.name
 ```
 
-### Reference
+## Reference
 * [Creating Linux virtual filesystems LWN.net](https://lwn.net/Articles/57369/)
 * [The Linux kernel: The Linux Virtual File System](https://www.win.tue.nl/~aeb/linux/lk/lk-8.html)
