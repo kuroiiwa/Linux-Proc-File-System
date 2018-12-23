@@ -23,7 +23,6 @@
 * It will fork 20 child processes. Each of them will wait 5s and the test file will display process tree.
 * After its children exit, it will display tree again.
 #### Result
-`...`
 ```
 ======================================
 After creating processes, name: ptreeps.name
@@ -49,7 +48,6 @@ ptreeps.name
 ./0/1/2040/2583/2589/2718/2722:
 ptreeps.name
 ```
-`...`
 
 ### Reference
 * [Creating Linux virtual filesystems LWN.net](https://lwn.net/Articles/57369/)
